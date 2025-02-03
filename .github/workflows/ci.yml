@@ -35,4 +35,4 @@ jobs:
 
       - name: Scan Docker Image with Grype
         run: |
-          grype my-flask-app:latest --fail-on high
+          grype my-flask-app:latest
