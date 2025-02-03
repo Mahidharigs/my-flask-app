@@ -54,6 +54,10 @@ jobs:
         run: |
           curl -sSfL https://raw.githubusercontent.com/anchore/grype/main/install.sh | sudo sh -s -- -b /usr/local/bin
 
+      - name: Update Grype Database
+        run: |
+          grype db update
+
       - name: Pull Image from DockerHub
         run: |
           docker pull ${{ secrets.DOCKER_USERNAME }}/my-flask-app:latest
