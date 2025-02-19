@@ -59,7 +59,7 @@ jobs:
           syft ${{ secrets.DOCKER_USERNAME }}/my-flask-app:latest -o spdx-json > sbom.json
 
       - name: Upload SBOM as Artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: SBOM Report
           path: sbom.json
