@@ -50,6 +50,20 @@ jobs:
         run: |
           docker push ${{ secrets.DOCKER_USERNAME }}/my-flask-app:latest
 
+      - name: Install Syft for SBOM Generation
+        run: |
+          curl -sSfL https://raw.githubusercontent.com/anchore/syft/main/install.sh | sudo sh -s -- -b /usr/local/bin
+
+      - name: Generate SBOM with Syft
+        run: |
+          syft ${{ secrets.DOCKER_USERNAME }}/my-flask-app:latest -o spdx-json > sbom.json
+
+      - name: Upload SBOM as Artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: SBOM Report
+          path: sbom.json
+
       - name: Install Grype
         run: |
           curl -sSfL https://raw.githubusercontent.com/anchore/grype/main/install.sh | sudo sh -s -- -b /usr/local/bin
