@@ -79,3 +79,25 @@ jobs:
       - name: Scan Docker Image with Grype
         run: |
           grype ${{ secrets.DOCKER_USERNAME }}/my-flask-app:latest
+
+      - name: Install Trivy
+        run: |
+          sudo apt-get install -y wget
+          wget https://github.com/aquasecurity/trivy/releases/latest/download/trivy_Linux-64bit.tar.gz
+          tar -xzf trivy_Linux-64bit.tar.gz
+          sudo mv trivy /usr/local/bin/
+      
+      - name: Scan Docker Image with Trivy
+        run: |
+          trivy image --exit-code 1 --severity HIGH,CRITICAL ${{ secrets.DOCKER_USERNAME }}/my-flask-app:latest
+
+      - name: Upload Trivy Scan Report
+        if: always()
+        run: |
+          trivy image --format json -o trivy-report.json ${{ secrets.DOCKER_USERNAME }}/my-flask-app:latest
+
+      - name: Upload Trivy Report as Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: Trivy Scan Report
+          path: trivy-report.json
