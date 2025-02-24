@@ -91,4 +91,4 @@ jobs:
         with:
           target: 'http://www.itsecgames.com/'
           rules_file_name: '.github/workflows/rules.zap'
-          allow_issue_writing: 'true'
+          #allow_issue_writing: 'true'
