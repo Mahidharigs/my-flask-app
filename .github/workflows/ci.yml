@@ -8,6 +8,10 @@ on:
     branches:
       - main
 
+permissions:
+  issues: write
+  contents: read
+
 jobs:
   build-push-scan:
     runs-on: ubuntu-latest
@@ -23,15 +27,16 @@ jobs:
           project: 'my-flask-app'
           path: '.'
           format: 'HTML'
-          out: 'reports' # this is the default, no need to specify unless you wish to override it
+          out: 'reports'
           args: >
             --failOnCVSS 7
             --enableRetired
+
       - name: Upload Test results
         uses: actions/upload-artifact@master
         with:
            name: Depcheck report
-           path: ${{github.workspace}}/reports
+           path: ${{ github.workspace }}/reports
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v2
